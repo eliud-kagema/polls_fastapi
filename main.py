@@ -75,3 +75,22 @@ def delete_question(qid: int, db: Session = Depends(get_db)):
     get_question_obj(db=db, qid=qid)
     crud.delete_question(db=db, qid=qid)
     return {"detail": "Question deleted", "status_code": 204}
+
+
+@app.post("/questions/{qid}/choice", response_model=schema.ChoiceList)
+def create_choice(qid: int, choice: schema.ChoiceCreate, db: Session = Depends(get_db)):
+
+    """
+    create choice for a particular poll question
+    """
+    get_question_obj(db=db, qid=qid)
+    return crud.create_choice(db=db, qid=qid, choice=choice)
+
+
+@app.put("/choices/{choice_id}/vote", response_model=schema.ChoiceList)
+def update_vote(choice_id: int, db: Session = Depends(get_db)):
+
+    """
+    To update votes for a particular question
+    """
+    return crud.update_vote(choice_id=choice_id, db=db)
